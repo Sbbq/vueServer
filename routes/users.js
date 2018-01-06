@@ -9,9 +9,6 @@ router.get('/b', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.get('/c', function(req, res, next) {
-  res.send('respond with a resource');
-});
 
 router.get('/d',function(req,res,next){
 	res.send("aaa");
