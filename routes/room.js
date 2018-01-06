@@ -21,6 +21,9 @@ router.get("/",function(req,res,next){
 	let pageSize=parseInt(req.query.pageSize);
 	let priceUp=parseInt(req.query.priceUp);
 	let priceDown=parseInt(req.query.priceDown);
+	console.log(req.query.sortFlag);
+	console.log(priceDown);
+	console.log(priceUp);
 	let skip=(page-1)*pageSize;
 	let params={
 		roomPrice:{
@@ -28,7 +31,7 @@ router.get("/",function(req,res,next){
 			$lte:priceUp
 		}
 	};
-	Room.find(params).skip(skip).limit(pageSize).sort("-roomPrice").exec(function(err,result){
+	Room.find(params).skip(skip).limit(pageSize).sort({roomPrice:req.query.sortFlag}).exec(function(err,result){
 		if(err){
 			res.json({
 				status:"1",
