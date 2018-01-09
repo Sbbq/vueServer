@@ -41,6 +41,7 @@ router.get("/",function(req,res,next){
 		else{
 			res.json({
 				status:"0",
+				message:"",
 				room:result
 			})
 		}
