@@ -22,15 +22,31 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function(req,res,next){
+	if(req.cookies.userId){
+		next();
+	}else{
+		if(req.originalUrl=='/users/login' || req.originalUrl=='/users/logout' || req.originalUrl.indexOf('/room')>-1){
+			next();
+		}else{
+			res.json({
+				status:'10001',
+				msg:'当前未登录',
+				result:''
+			});
+		}
+	}
+})
+
 app.use('/', index);
 app.use("/room",room);
 app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+	var err = new Error('Not Found');
+	err.status = 404;
+	next(err);
 });
 
 // error handler
