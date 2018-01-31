@@ -3,7 +3,7 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Room=require("../models/room");
 
-mongoose.connect("mongodb://zk:123456@localhost:27017/zkTest");
+mongoose.connect("mongodb://zk:123456@localhost/zkTest");
 mongoose.connection.on("connected", function () {
 	console.log("MongoDB connected success.")
 });
