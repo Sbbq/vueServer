@@ -26,7 +26,7 @@ app.use(function(req,res,next){
 	if(req.cookies.userId){
 		next();
 	}else{
-		if(req.originalUrl=='/users/login' || req.originalUrl=='/users/logout' || req.originalUrl.indexOf('/room/list')>-1){
+		if(req.originalUrl.indexOf('/users/login')>-1 || req.originalUrl.indexOf('/users/logout')>-1 || req.originalUrl.indexOf('/room/list')>-1){
 			next();
 		}else{
 			res.json({
