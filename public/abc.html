@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <script src="jquery-2.1.4.min.js"></script>
+    <script src="echarts.min.js"></script>
+    <style type="text/css">
+    #main{
+        width: 100%;
+        height:100%;
+        position: absolute;
+        top: 0;
+        left:0;
+        right:0;
+    }
+</style>
+</head>
+<body>
+    <div id="main"></div>
+    <script type="text/javascript">
+        var name = 'bj';
+        var myChart = echarts.init(document.getElementById('main'));
+        var jApperance=JSON.parse("{\"backgroundColor\":\"rgba(64, 74, 89, 0)\",\"title\":{\"text\":\"北京热力图\",\"show\":true,\"posStyle\":{\"leftAndright\":\"center\",\"topAndbottom\":\"top\"},\"textStyle\":{\"color\":\"rgba(255, 255, 255, 1)\",\"fontSize\":\"18\",\"fontWeight\":\"bolder\",\"fontFamily\":\"Georgia\"}},\"visualMapColor\":{\"colorStart\":\"rgba(246, 239, 166, 1)\",\"colorEnd\":\"rgba(191, 68, 76, 1)\"},\"visualMapShow\":true,\"colorSeries\":[\"rgba(170, 34, 136, 1)\",\"rgba(47, 69, 84, 1)\",\"rgba(97, 160, 168, 1)\"],\"label\":{\"show\":true,\"textStyle\":{\"color\":\"rgba(255, 255, 255, 1)\",\"fontSize\":\"12\",\"fontWeight\":\"normal\",\"fontFamily\":\"Georgia\"},\"position\":\"top\"}}");
+        var jData=JSON.parse("[{\"serieName\":\"地区\",\"seriesData\":[{\"name\":\"东城区\",\"value\":2},{\"name\":\"西城区\",\"value\":2},{\"name\":\"海淀区\",\"value\":3},{\"name\":\"朝阳区\",\"value\":4},{\"name\":\"石景山区\",\"value\":5},{\"name\":\"大兴区\",\"value\":6},{\"name\":\"门头沟区\",\"value\":7},{\"name\":\"昌平区\",\"value\":7},{\"name\":\"通州区\",\"value\":8},{\"name\":\"房山区\",\"value\":8},{\"name\":\"丰台区\",\"value\":8},{\"name\":\"顺义区\",\"value\":8},{\"name\":\"怀柔区\",\"value\":8},{\"name\":\"密云区\",\"value\":8},{\"name\":\"延庆区\",\"value\":8},{\"name\":\"平谷区\",\"value\":8}]}]");
+        var title={
+            show:jApperance.title.show,
+            text: jApperance.title.text,
+            left: jApperance.title.posStyle.leftAndright,
+            top: jApperance.title.posStyle.topAndbottom,
+            textStyle:jApperance.title.textStyle
+        };
+        var label={
+            normal:{
+                show:jApperance.label.show,
+                fontFamily:jApperance.label.textStyle.fontFamily,
+                fontStyle:jApperance.label.textStyle.fontWeight,
+                fontSize:jApperance.label.textStyle.fontSize,
+                color:jApperance.label.textStyle.color
+            }
+        };
+        var whDataSample=[{name:'江岸区',value:36},{name:'江汉区',value:44},{name:'硚口区',value:67},{name:'汉阳区',value:82},{name:'武昌区',value:100},{name:'青山区',value:38},{name:'洪山区',value:27},{name:'东西湖区',value:77},{name:'汉南区',value:63},{name:'蔡甸区',value:22},{name:'江夏区',value:18},{name:'黄陂区',value:84},{name:'新洲区',value:47}];
+        var bjDataSample=[{
+            name: '东城区',
+            value: 36,
+        }, {
+            name: '西城区',
+            value: 44,                         
+        }, {
+            name: '海淀区',
+            value: 78
+        }, {
+            name: '朝阳区',
+            value: 96
+        }, {
+            name: '石景山区',
+            value: 30,
+            label: {
+                normal: {
+                    show: false
+                }
+            }                            
+        }, {
+            name: '大兴区',
+            value: 52
+        }, {
+            name: '门头沟区',
+            value: 22,
+        }, {
+            name: '昌平区',
+            value: 40
+        }, {
+            name: '通州区',
+            value: 100,
+        }, {
+            name: '房山区',
+            value: 46
+        }, {
+            name: '丰台区',
+            value: 52
+        }, {
+            name: '顺义区',
+            value: 34
+        }, {
+            name: '怀柔区',
+            value: 42
+        }, {
+            name: '密云区',
+            value: 36
+        }, {
+            name: '延庆区',
+            value: 44
+        }, {
+            name: '平谷区',
+            value: 32
+        }
+        ];
+        var mapdata=[bjDataSample,whDataSample];
+        var index=0;
+        var color=["rgba(170, 34, 136, 0.9)","rgba(47, 69, 84, 1)","rgba(97, 160, 168, 1)"];
+        var backgroundColor=jApperance.backgroundColor;
+        var option = {
+            backgroundColor: backgroundColor,
+            title: title,
+            visualMap: {
+                min: 0,
+                max: 100,
+                left: 'left',
+                top: 'bottom',
+                calculable: true,
+                inRange:{
+                 color: color
+             }
+         },
+         series: [{
+            type: 'map',
+            mapType: name,
+            label: label,
+            itemStyle: {
+
+                normal: {
+                    borderColor: '#389BB7',
+                    areaColor: '#fff',
+                },
+                emphasis: {
+                    areaColor: '#389BB7',
+                    borderWidth: 0
+                }
+            },
+            animation: false,
+            data: mapdata[index],
+        }]};
+        
+        function LoadData(jData){
+
+            let newData=[];
+            jData.forEach(function(item,i){
+                item.seriesData.forEach(function(a,b){
+                    newData.push({name:a.name,value:a.value});
+                });
+            });
+            option.series[0].data=newData;
+            EchartInit();
+        }
+        function LoadSettings(jApperance)
+        {
+            backgroundColor=jApperance.backgroundColor;
+            option.visualMap.show=jApperance.visualMapShow;
+            color=[];
+            jApperance.colorSeries.forEach(function(item,i){
+                color.push(item);
+            });
+            option.visualMap.inRange.color=color;
+            title.show=jApperance.title.show;
+            title.text=jApperance.title.text;
+            title.left=jApperance.title.posStyle.leftAndright;              
+            title.top=jApperance.title.posStyle.topAndbottom;
+            title.textStyle=jApperance.title.textStyle;
+            label.normal.show=jApperance.label.show;
+            label.normal.fontFamily=jApperance.label.textStyle.fontFamily;
+            label.normal.fontWeight=jApperance.label.textStyle.fontWeight;
+            label.normal.fontSize=jApperance.label.textStyle.fontSize;
+            label.normal.color=jApperance.label.textStyle.color;
+            // legend.orient=jApperance.legend.legendPos.verticalAndhorizon,
+            // legend.top=jApperance.legend.legendPos.topAndbottom,
+            // legend.left=jApperance.legend.legendPos.leftAndright,
+            // legend.textStyle=jApperance.legend.textStyle;
+            
+            // for(let i=0;i<jApperance.dataSeries.length;i++){
+            //     colorList[i]=jApperance.dataSeries[i].color;
+            // }
+            EchartInit();
+        }
+        function EchartInit()
+        {
+            option.title=title;
+            option.backgroundColor=backgroundColor;
+            // option.series=series;
+            // option.legend=legend;
+            option.series[0].label=label;
+            // option.color=colorList;
+            myChart.setOption(option);
+            window.onresize=myChart.resize;
+        }
+        var geoCoordMap = {
+            '东城区':[116.418757,39.917544],
+            '西城区':[116.366794,39.915309],
+            '海淀区':[116.2202,40.0239],
+            '朝阳区':[116.4977,39.949],
+            '石景山区':[116.195445,39.914601],
+            '大兴区':[116.4716,39.6352],
+            '门头沟区':[115.8,39.9957],
+            '昌平区':[116.235906,40.218085],
+            '通州区':[116.7297,39.8131],
+            '房山区':[115.8453,39.7163],
+            '丰台区':[116.286968,39.863642],
+            '顺义区':[116.653525,40.128936],
+            '怀柔区':[116.6377,40.6219],
+            '密云区':[117.0923,40.5121],
+            '延庆区':[115.985006,40.465325],
+            '平谷区':[117.112335,40.144783]
+        };
+        //LoadSettings(jApperance);
+        var bjUrl = "data-1499156198404-H1AJkAOEZ.json";
+        var whUrl="whData.json";
+        var dataUrl=[bjUrl,whUrl];
+        $.getJSON(bjUrl, function(geoJson) {
+            echarts.registerMap('bj', geoJson);
+            myChart.hideLoading();
+            var geoCoordMap = {
+                '东城区':[116.418757,39.917544],
+                '西城区':[116.366794,39.915309],
+                '海淀区':[116.2202,40.0239],
+                '朝阳区':[116.4977,39.949],
+                '石景山区':[116.195445,39.914601],
+                '大兴区':[116.4716,39.6352],
+                '门头沟区':[115.8,39.9957],
+                '昌平区':[116.235906,40.218085],
+                '通州区':[116.7297,39.8131],
+                '房山区':[115.8453,39.7163],
+                '丰台区':[116.286968,39.863642],
+                '顺义区':[116.653525,40.128936],
+                '怀柔区':[116.6377,40.6219],
+                '密云区':[117.0923,40.5121],
+                '延庆区':[115.985006,40.465325],
+                '平谷区':[117.112335,40.144783]
+            };
+            var moveLine = {
+                'normal':[
+                {"fromName":"省委","toName":"合肥市",'coords':[[117.37,31.786],[117.37,31.386],]},
+                ],
+                'warning':[
+
+                ]
+            };
+            var data = [
+            {name:'朝阳区',value:190},
+            ];
+            var max = 480, min = 9; 
+            var maxSize4Pin = 100, minSize4Pin = 20;
+
+            var convertData = function (data) {
+                var res = [];
+                for (var i = 0; i < data.length; i++) {
+                    var geoCoord = geoCoordMap[data[i].name];
+                    if (geoCoord) {
+                        res.push({
+                            name: data[i].name,
+                            value: geoCoord.concat(data[i].value)
+                        });
+                    }
+                }
+                return res;
+            };
+            option = {
+                backgroundColor: '#091c3d',
+                title: {
+                    top:20,
+                    text: '',
+                    subtext: '',
+                    x: 'center',
+                    textStyle: {
+                        color: '#ccc'
+                    }
+                },    
+
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                      if(typeof(params.value)[2] == "undefined"){
+                        return params.name + ' : ' + params.value;
+                    }else{
+                        return params.name + ' : ' + params.value[2];
+                    }
+                }
+            },
+            legend: {
+                orient: 'vertical',
+                y: 'bottom',
+                x:'right',
+                data:['pm2.5'],
+                textStyle: {
+                    color: '#fff'
+                }
+            }, 
+            visualMap: {
+                show: false,
+                min: 0,
+                max: 500,
+                left: 'left',
+                top: 'bottom',
+                text: ['高', '低'], 
+                calculable: true,
+                seriesIndex: [1],
+                inRange: {
+                }
+            },
+            geo: {
+                show: true,
+                map: 'jiangxi',
+                label: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: false,
+                    }
+                },
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: 'transparent',
+                        borderColor: '#3fdaff',
+                        borderWidth: 2,
+                        shadowColor: 'rgba(63, 218, 255, 0.5)',
+                        shadowBlur: 30
+                    },
+                    emphasis: {
+                        areaColor: '#2B91B7',
+                    }
+                }
+            },
+            series : [
+            {
+                name: 'light',
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                data: convertData(data),
+                symbolSize: function (val) {
+                    return val[2] / 10;
+                },
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'right',
+                        show: true
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#F4E925'
+                    }
+                }
+            },
+            {
+                type: 'map',
+                map: 'jiangxi',
+                geoIndex: 0,
+                aspectScale: 0.75, 
+                showLegendSymbol: false, 
+                label: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: false,
+                        textStyle: {
+                            color: '#fff'
+                        }
+                    }
+                },
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: '#031525',
+                        borderColor: '#FFFFFF',
+                    },
+                    emphasis: {
+                        areaColor: '#2B91B7'
+                    }
+                },
+                animation: false,
+                data: data
+            },
+            {
+                name: 'Top 5',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                data: convertData(data.sort(function (a, b) {
+                    return b.value - a.value;
+                }).slice(0, 5)),
+                symbolSize: function (val) {
+                    return val[2] / 10;
+                },
+                showEffectOn: 'render',
+                rippleEffect: {
+                    brushType: 'stroke'
+                },
+                hoverAnimation: true,
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'right',
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#F4E925',
+                        shadowBlur: 10,
+                        shadowColor: '#05C3F9'
+                    }
+                },
+                zlevel: 1
+            },
+            {
+                name: '线路',
+                type: 'lines',
+                coordinateSystem: 'geo',
+                zlevel: 2,
+                large: true,
+                effect: {
+                    show: true,
+                    constantSpeed: 30,
+                    symbol: 'arrow',
+                    symbolSize: 0,
+                    trailLength: 0,
+                },
+
+                lineStyle: {
+                    normal: {
+                        color:'#0fff17',
+                        width: 2,
+                        opacity: 1.0,
+                        curveness: 0.15
+                    }
+                },
+                data: moveLine.normal
+            },
+            {
+                name: '线路',
+                type: 'lines',
+                coordinateSystem: 'geo',
+                zlevel: 2,
+                large: true,
+                effect: {
+                    show: true,
+                    constantSpeed: 30,
+                    symbol: 'arrow',
+                    symbolSize: 10,
+                    trailLength: 0,
+                },
+
+                lineStyle: {
+                    normal: {
+                        color:'rgb(255, 0, 0)',
+                        width: 2,
+                        opacity: 1,
+                        curveness: 0.15
+                    }
+                },
+                data: moveLine.warning
+            }
+
+            ]
+        };
+        myChart.setOption(option);
+    });
+        //LoadData(jData);
+        window.onresize=myChart.resize;
+    </script>
+</body>
+</html>

@@ -9,7 +9,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var room = require('./routes/room');
 var app = express();
-
+var tee = require('./routes/tee');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+/*
 app.use(function(req,res,next){
 	if(req.cookies.userId){
 		next();
@@ -36,12 +36,12 @@ app.use(function(req,res,next){
 			});
 		}
 	}
-})
+})*/
 
 app.use('/', index);
 app.use("/room",room);
 app.use('/users', users);
-
+app.use('/tee', tee);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
 	var err = new Error('Not Found');

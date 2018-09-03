@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PUE</title>
+    <style>
+    .pue{
+        width: 100%;
+        height:100%;
+        position: absolute;
+        top: 0;
+        left:0;
+        right:0;
+    }
+</style>
+<script src="echarts.min.js"></script>
+<script src="jquery-2.1.4.min.js"></script>
+</head>
+<body>
+    <div id="PUEMain" class="pue"></div>
+    <script type="text/javascript">
+        var symbolCircle="image://data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQwIDc5LjE2MDQ1MSwgMjAxNy8wNS8wNi0wMTowODoyMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkNFODREQzZGOUVEMDExRThBMUMxREJBNzRGRTA4Mzg4IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkNFODREQzcwOUVEMDExRThBMUMxREJBNzRGRTA4Mzg4Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6Q0U4NERDNkQ5RUQwMTFFOEExQzFEQkE3NEZFMDgzODgiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6Q0U4NERDNkU5RUQwMTFFOEExQzFEQkE3NEZFMDgzODgiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5qu1xpAAAB+klEQVR42oSTTWtTQRSGn7m9t4kEe2MbFandxL2lGmgXuhKhG6UIJhapuFH/g3/A/6AupEVsIkhxVdSdgorBUveNi9pFbVIT22huPmY8E5mmhZQO3Hve8/GeOTNzjjLG4NboazwFOYGzKKYwnBS8JfiT4BeC8z+uo128cuSzr0iLKAg5GDDkY5rioKbS9BiRL9NS5IyiJUmyGzco7ZFHC6QlxYfAsDAkCThk1RTZDsxJgksbOUrqzLzxxP7Z91gOfZY4YtVazLRgWhkmfd3klhw0CBM9YnrcXE2E3PMGGNMd1us1npRW1VvrCwOWynWuaSM8Iub8Tq/U9Hlz5fgwj4Ro7yCw0uo2oYvx2+Qtz9N/ycQCvjhHIsmDfuXaShyOB6zoBuOeiUjFj7HtHLbUfuT99mCQqmkw4smv3PjNsHPYM/Yj77c3d0kKr+LJ9sXdTTLOUa/yuB9ZLu2pw3+2mBDyqt15oVnpdlV3lb6pdzvbPNSa76K2rbS63PYbFxNJvOWp8P7/d44lWT514eh3/vmVmajKtMDJboeFdzknyvvYCeZPT/HyMOLmR24K8Y7Ay7VnrO319tDtboK85+NLknxijJV4imqjTLK+zkT0i5xu0VbS47XnrB0YjG6CLJ6xU2WYlaCL4krJoFTEVhS5KIOxuFPoTdU/AQYAgzfQ173vneEAAAAASUVORK5CYII=";
+        Date.prototype.format = function (format) {
+            var o = {
+                "M+": this.getMonth() + 1, 
+                "d+": this.getDate(),    
+                "h+": this.getHours(),   
+                "m+": this.getMinutes(), 
+                "s+": this.getSeconds(), 
+                "q+": Math.floor((this.getMonth() + 3) / 3), 
+                "S": this.getMilliseconds() 
+            }
+            if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
+                (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                for (var k in o) if (new RegExp("(" + k + ")").test(format))
+                    format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+                return format;
+            }
+            let myChartPUE  = echarts.init(document.getElementById('PUEMain'));
+            let dataUrl="";
+            let optionPUE = null;  
+            
+            
+            let PUEXAxis=[];
+            let PUEData=[];
+            function initXAxisrray(){
+                let now = new Date();
+                let timeWidth = 15;
+                PUEXAxis=[];
+                while (timeWidth--) {
+                    PUEXAxis.unshift(now.format("hh:mm:ss"));
+                    now = new Date(now - 2000);
+                }
+            }
+            function initFackerData(){
+                PUEData = [];
+                let timeWidth = 15;
+                while (timeWidth--) {
+                    PUEData.unshift((Math.random()*2+0.2).toFixed(2));
+                }
+            }
+            optionPUE = {         
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        lineStyle:{
+                            color:'#578aae',
+                            width:3
+                        }
+                    },
+                },
+                visualMap: [{
+                    show: false,
+                    type: 'continuous',
+                    inRange: {
+                        color: ['#1893e2', '#1163e5'],
+                    },
+                    dimension: 0,
+                    min: 0,
+                    max: PUEData.length - 1
+                }],
+                backgroundColor: 'transparent',
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    axisLabel:
+                    {
+                        show: true,
+                        margin: 12,
+                        interval: 0,
+                        textStyle: {
+                            color: '#578aae',
+                            fontFamily: 'MicrosoftYaHei',
+                            fontSize: 14,
+                        },
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#5f636b',
+                            width: 2,
+                        },
+                    },
+                    data:PUEXAxis
+                },
+                yAxis: {
+                    type: 'value',
+                    splitLine:{
+                        show:false
+                    },
+                    min: function (value) {
+                        return (value.min - 0.1).toFixed(1);
+                    },
+                    max: function (value) {
+                        return (value.max + 0.1).toFixed(1);
+                    },
+                    axisLabel:
+                    {
+                        show: true,
+                        textStyle: {
+                            color: '#578aae',
+                            fontFamily: 'MicrosoftYaHei',
+                            fontSize: 14,
+                        },
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#5f636b',
+                            width: 2,
+                        },
+                    },
+                },
+                series: [{
+                    name: "PUE",
+                    type: 'line',
+                    symbol: symbolCircle,
+                    symbolSize: 15,
+                    data: PUEData,
+                    animation: false,
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                offset: 0,
+                                color: 'rgb(22, 135, 211,0.8)'
+                            }, {
+                                offset: 1,
+                                color: 'rgb(24, 74, 112,0)'
+                            }])
+                        }
+                    },
+                }],         
+            };
+
+            if (optionPUE && typeof optionPUE === "object") {
+                myChartPUE.showLoading();
+                //myChartPUE.setOption(optionPUE, true);                       
+            };
+            let myTimerPUE=setInterval(function (){
+                UpdateDataPUE();
+            }, 2100);
+            window.onresize=myChartPUE.resize;
+            function UpdateDataPUE() {
+                let chart = document.getElementById("PUEMain");      
+                if (chart == null) {         
+                    clearInterval(myTimerPUE);
+                }        
+                else {
+                    $.ajax("http://1o847680q6.imwork.net:25339/Mobile3DInterface/DymicringPower/GetDymicringPowerData?ChannelID=2-213-0-254-8",{
+                        type:'GET',
+                        dataType:'json',
+                        success: function (res) {
+                        if(res==null || res==""){
+                            return;
+                        }                
+                        var result = res;
+                        PUEXAxis=[];
+                        PUEData=[];
+                        if(typeof result.data !=null || result.data.length!=0){
+                            result.data.forEach(function(item,index){
+                                let temp=item.UpdateTime;
+                                let datetemp=new Date(temp);
+                                let dateinfo=datetemp.format("hh:mm");
+                            PUEXAxis.push(dateinfo);
+                            PUEData.push(parseFloat(item.Value));
+                            })
+                            optionPUE.xAxis.data=PUEXAxis;
+                            optionPUE.series[0].data=PUEData;
+                            if (optionPUE && typeof optionPUE === "object") {
+                                    myChartPUE.hideLoading();
+                                    myChartPUE.resize();
+                                    myChartPUE.setOption(optionPUE, true);    
+                                }
+                            }
+                        }
+                    })        
+                }
+            }         
+        </script>
+    </body>
+    </html>
